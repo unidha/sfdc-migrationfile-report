@@ -1,0 +1,55 @@
+<apex:page controller="Migration_AttachmentReport_Ctrl" sideBar="false" readOnly="true">
+<apex:form >
+<apex:pageBlock title="Migration Report for Attachment" >
+
+        <div>
+             Total attachment is : {!totalAttachment}  <br/>
+             Total inactive owner is :{!totalInactiveOwner}
+        </div>
+        
+        <span>Attachment Object: </span>
+        <apex:selectList value="{!selectedParent}" multiselect="false" size="1">
+            <apex:actionSupport event="onchange" action="{!retrieveAttachmentReport}" rerender="listAttachmentId"/>
+            <apex:selectOptions value="{!attachmentObjects}"/>
+       </apex:selectList>	
+       <span></span>
+       <apex:commandLink action="{!downloadReport}" value="Download {!selectedParent}" rendered="{!IF(selectedParent!='None',true,false)}">
+         
+       </apex:commandLink>
+       
+       
+         
+         <apex:dataTable value="{!listMigrationObject}" var="obj" styleClass="list" rowClasses="dataRow" headerClass="tableTitle" id="listAttachmentId">
+	       <apex:column >
+	           <apex:facet name="header">Attachment Name</apex:facet>
+	            <apex:outputLink value="/{!obj.attObject.Id}">{!obj.attObject.Name}</apex:outputLink>
+	      </apex:column>
+	        <apex:column >
+	           <apex:facet name="header">ContentType</apex:facet>
+	            <apex:outputText value="{!obj.attObject.ContentType}"/>
+	      </apex:column>
+	      <apex:column >
+	           <apex:facet name="header">Object Name</apex:facet>
+	           <apex:outputLink value="/{!obj.attObject.ParentId}">{!obj.attObject.Parent.Type}</apex:outputLink>
+	      </apex:column>
+	        <apex:column >
+	           <apex:facet name="header">Owner Name</apex:facet>
+	            <apex:outputLink value="/{!obj.attObject.Owner.Id}">{!obj.attObject.Owner.Name}</apex:outputLink>
+	      </apex:column>
+	        <apex:column >
+	           <apex:facet name="header">Owner Active</apex:facet>
+	            <apex:outputText value="{!obj.attObject.Owner.isActive}"/>
+	      </apex:column>
+	      <apex:column >
+	           <apex:facet name="header">IsConverted</apex:facet>
+	            <apex:outputText value="{!obj.isConverted}"/>
+	      </apex:column>
+	       <apex:column >
+	           <apex:facet name="header">File Name</apex:facet>
+	             <apex:outputLink value="/{!obj.contentObject.Id}">{!obj.contentObject.Title}</apex:outputLink>
+	      </apex:column>
+       </apex:dataTable>
+     
+</apex:pageBlock>
+    </apex:form>
+</apex:page>
